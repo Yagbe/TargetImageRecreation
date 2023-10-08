@@ -127,7 +127,7 @@ def generate_subimages(image, num_subimages):
             subimages.append(subimage)
 
     return subimages
-image_path = 'images/target_image}).jpg'
+image_path = 'images/target_image).jpg'
 image = cv.imread(image_path)
 
 if image is not None:
