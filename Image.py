@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 import random
+
 def shift_hue(image, target_hue):
     if image is None:
         print("Error: Failed to load the image.")
@@ -8,12 +9,28 @@ def shift_hue(image, target_hue):
 
     hsv_image = cv.cvtColor(image, cv.COLOR_BGR2HSV)
 
+    # Set the hue channel to the target hue
     hsv_image[:, :, 0] = target_hue
 
     shifted_image = cv.cvtColor(hsv_image, cv.COLOR_HSV2BGR)
 
     return shifted_image
+def shift_hue_and_saturation(image, target_hue, target_saturation):
+    if image is None:
+        print("Error: Failed to load the image.")
+        return None
 
+    hsv_image = cv.cvtColor(image, cv.COLOR_BGR2HSV)
+
+    # Shift hue
+    hsv_image[:, :, 0] = target_hue
+
+    # Shift saturation
+    hsv_image[:, :, 1] = target_saturation
+
+    shifted_image = cv.cvtColor(hsv_image, cv.COLOR_HSV2BGR)
+
+    return shifted_image
 def crop_to_squares(image, square_size):
     if image is None:
         print("Error: Failed to load the image.")
@@ -127,10 +144,11 @@ def generate_subimages(image, num_subimages):
             subimages.append(subimage)
 
     return subimages
-image_path = 'images/target_image.jpg'
+image_path = f'target_image.jpg'
 image = cv.imread(image_path)
 
 if image is not None:
+    # Load your target pixelated image
     pixel_size = 20 
     pixelated_image = pixelate_image(image, pixel_size)
 
@@ -146,8 +164,7 @@ if image is not None:
     resized_images = []
 
     for i in range(n):
-        #edit this based on how many images you have in your images file, there are about 95 images so i put 95 but you can do more
-        image_path = f'images/rimage ({random.randint(2, 95)}).jpg'
+        image_path = f'images/rimage ({random.randint(2, 200)}).jpg'
         image = cv.imread(image_path)
         
         if image is not None:
@@ -159,15 +176,14 @@ if image is not None:
     stitched_image = stitch_images_nxn(resized_images, int(n**0.5))
 
     stitched_image = cv.resize(stitched_image, (target_width, target_height), interpolation=cv.INTER_LINEAR)
+# Get the hue values from the pixelated image
+target_hue = get_hue(pixelated_image)
 
-    target_hue = get_hue(pixelated_image)
+# Shift the hue of the stitched image while keeping saturation at 50%
+shifted_image = shift_hue_and_saturation(stitched_image, target_hue, 127)  # 127 for 50% saturation
 
-    stitched_image = shift_hue(stitched_image, target_hue)
-
-    cv.imshow(f'Stitched Image ({target_width}x{target_height})', stitched_image)
-    cv.imshow("Pixelated Target Image", pixelated_image)
-    cv.imwrite("OutputImage.jpg",stitched_image)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-else:
-    print("Error: Failed to load the image.")
+cv.imshow(f'Stitched Image ({target_width}x{target_height})', shifted_image)
+cv.imshow("Pixelated Target Image", pixelated_image)
+cv.imwrite("OutputImage.jpg", shifted_image)
+cv.waitKey(0)
+cv.destroyAllWindows()
