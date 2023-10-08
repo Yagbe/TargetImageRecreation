@@ -127,7 +127,7 @@ def generate_subimages(image, num_subimages):
             subimages.append(subimage)
 
     return subimages
-image_path = 'images/target_image).jpg'
+image_path = 'images/target_image.jpg'
 image = cv.imread(image_path)
 
 if image is not None:
@@ -146,7 +146,7 @@ if image is not None:
     resized_images = []
 
     for i in range(n):
-        image_path = f'images/rimage ({random.randint(2, 960)}).jpg'
+        image_path = f'images/rimage ({random.randint(2, 870)}).jpg'
         image = cv.imread(image_path)
         
         if image is not None:
