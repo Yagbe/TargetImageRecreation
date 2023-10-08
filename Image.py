@@ -127,7 +127,7 @@ def generate_subimages(image, num_subimages):
             subimages.append(subimage)
 
     return subimages
-image_path = f'images/rimage ({random.randint(2,960)}).jpg'
+image_path = 'images (2)/target_image}).jpg'
 image = cv.imread(image_path)
 
 if image is not None:
@@ -146,7 +146,7 @@ if image is not None:
     resized_images = []
 
     for i in range(n):
-        image_path = f'images/rimage ({random.randint(2, 960)}).jpg'
+        image_path = f'images (2)/rimage ({random.randint(2, 960)}).jpg'
         image = cv.imread(image_path)
         
         if image is not None:
@@ -159,10 +159,8 @@ if image is not None:
 
     stitched_image = cv.resize(stitched_image, (target_width, target_height), interpolation=cv.INTER_LINEAR)
 
-    # Get the hue values from the pixelated target image
     target_hue = get_hue(pixelated_image)
 
-    # Shift the hue of the stitched image to match the target hue
     stitched_image = shift_hue(stitched_image, target_hue)
 
     cv.imshow(f'Stitched Image ({target_width}x{target_height})', stitched_image)
