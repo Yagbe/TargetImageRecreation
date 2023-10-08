@@ -146,7 +146,8 @@ if image is not None:
     resized_images = []
 
     for i in range(n):
-        image_path = f'images/rimage ({random.randint(2, 870)}).jpg'
+        #edit this based on how many images you have in your images file, there are about 95 images so i put 95 but you can do more
+        image_path = f'images/rimage ({random.randint(2, 95)}).jpg'
         image = cv.imread(image_path)
         
         if image is not None:
